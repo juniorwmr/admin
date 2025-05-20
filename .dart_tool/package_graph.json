@@ -11,6 +11,7 @@
         "fl_chart",
         "flutter",
         "flutter_svg",
+        "go_router",
         "google_fonts",
         "provider"
       ],
@@ -470,6 +471,34 @@
         "collection",
         "meta"
       ]
+    },
+    {
+      "name": "go_router",
+      "version": "13.2.5",
+      "dependencies": [
+        "collection",
+        "flutter",
+        "flutter_web_plugins",
+        "logging",
+        "meta"
+      ]
+    },
+    {
+      "name": "flutter_web_plugins",
+      "version": "0.0.0",
+      "dependencies": [
+        "characters",
+        "collection",
+        "flutter",
+        "material_color_utilities",
+        "meta",
+        "vector_math"
+      ]
+    },
+    {
+      "name": "logging",
+      "version": "1.3.0",
+      "dependencies": []
     }
   ],
   "configVersion": 1
