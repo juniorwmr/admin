@@ -16,11 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Admin Panel 4',
+      title: 'Admin Panel',
       routerConfig: router,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: bgColor,
-        textTheme: GoogleFonts.poppinsTextTheme(
+        textTheme: GoogleFonts.andikaTextTheme(
           Theme.of(context).textTheme,
         ).apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,

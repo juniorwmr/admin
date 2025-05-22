@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants.dart';
 import 'cardapio_item.dart';
-import '../criar_produto/criar_produto_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class CardapioCategoria extends StatelessWidget {
@@ -49,14 +48,14 @@ class CardapioCategoria extends StatelessWidget {
               preco: 43.99,
               pausado: true,
               estoque: 5,
-              imagem: 'assets/images/frango_inteiro.png',
+              imagem: 'https://fakeimg.pl/600x400',
             ),
             CardapioItem(
               nome: 'Frango assado (meio)',
               preco: 26.99,
               pausado: true,
               estoque: 5,
-              imagem: 'assets/images/frango_meio.png',
+              imagem: 'https://fakeimg.pl/600x400',
             ),
           ],
         ),

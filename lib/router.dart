@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:admin/screens/dashboard/dashboard_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/main/main_screen.dart';
 import 'screens/cardapio/cardapio_screen.dart';
@@ -13,6 +13,10 @@ final router = GoRouter(
       routes: [
         GoRoute(
           path: '/',
+          builder: (context, state) => const DashboardScreen(),
+        ),
+        GoRoute(
+          path: '/cardapio',
           builder: (context, state) => const CardapioScreen(),
           routes: [
             GoRoute(

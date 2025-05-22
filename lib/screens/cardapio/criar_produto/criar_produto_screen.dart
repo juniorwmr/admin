@@ -23,7 +23,7 @@ class CriarProdutoScreen extends StatelessWidget {
         centerTitle: false,
         actions: [
           TextButton(
-            onPressed: () => context.go('/'),
+            onPressed: () => context.go('/cardapio'),
             child: Text('Fechar', style: TextStyle(color: Colors.red)),
           ),
         ],
@@ -46,12 +46,13 @@ class CriarProdutoScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             OutlinedButton(
-              onPressed: () => context.go('/'),
+              onPressed: () => context.go('/cardapio'),
               child: Text('Voltar'),
             ),
             SizedBox(width: 16),
             ElevatedButton(
-              onPressed: () => context.go('/criar-produto/grupos-complementos'),
+              onPressed: () =>
+                  context.go('/cardapio/criar-produto/grupos-complementos'),
               child: Text('Continuar'),
             ),
           ],

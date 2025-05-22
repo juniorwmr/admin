@@ -25,7 +25,7 @@ class CardapioItem extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
+            child: Image.network(
               imagem,
               width: 64,
               height: 64,
