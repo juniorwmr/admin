@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:injector/injector.dart';
-import '../models/produto.dart';
 
 class ProdutoWizardController {
   static final ProdutoWizardController _instance =

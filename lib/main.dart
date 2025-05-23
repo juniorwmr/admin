@@ -4,12 +4,14 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'constants.dart';
 import 'router.dart';
 import 'di/injector.dart';
+import 'shared/config/env_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setUrlStrategy(PathUrlStrategy());
 
   try {
+    await EnvConfig.init();
     await setupInjector();
   } catch (e) {
     debugPrint('Erro ao configurar injector: $e');

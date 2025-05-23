@@ -4,23 +4,21 @@ import '../models/produto.dart';
 import '../models/grupo_complemento.dart';
 import '../models/complemento_produto.dart';
 import 'dart:convert';
-import 'package:injector/injector.dart';
 import 'produto_wizard_controller.dart';
+import 'package:flutter/foundation.dart';
+import '../services/produto_service.dart';
 
-class ProdutoController {
-  static final ProdutoController _instance = ProdutoController._internal();
-  factory ProdutoController() => _instance;
-  ProdutoController._internal() {
-    _prefs = Injector.appInstance.get<SharedPreferences>();
-    _carregarDados();
-  }
-
+class ProdutoController extends ChangeNotifier {
+  final IProdutoService _produtoService;
+  final SharedPreferences _prefs;
   final _produtos = ValueNotifier<List<Produto>>([]);
   final _gruposReutilizaveis = ValueNotifier<List<GrupoComplemento>>([]);
   final _produto = ValueNotifier<Produto?>(null);
   final _wizardController = ProdutoWizardController();
 
-  late final SharedPreferences _prefs;
+  ProdutoController(this._produtoService, this._prefs) {
+    _carregarDados();
+  }
 
   ValueNotifier<List<Produto>> get produtos => _produtos;
   ValueNotifier<List<GrupoComplemento>> get gruposReutilizaveis =>
@@ -166,15 +164,22 @@ class ProdutoController {
   }
 
   Future<void> salvarProduto() async {
-    final index = _produtos.value.indexWhere((p) => p.id == _produto.value!.id);
-    if (index >= 0) {
-      _produtos.value = [
-        ..._produtos.value.sublist(0, index),
-        _produto.value!,
-        ..._produtos.value.sublist(index + 1),
-      ];
-    } else {
-      _produtos.value = [..._produtos.value, _produto.value!];
+    if (produto.value == null) return;
+
+    try {
+      if (produto.value!.id.isEmpty) {
+        final novoProduto = await _produtoService.criarProduto(produto.value!);
+        produto.value = novoProduto;
+      } else {
+        final produtoAtualizado = await _produtoService.atualizarProduto(
+          produto.value!.id,
+          produto.value!,
+        );
+        produto.value = produtoAtualizado;
+      }
+    } catch (e) {
+      // Tratar erro
+      rethrow;
     }
   }
 
@@ -220,5 +225,25 @@ class ProdutoController {
         .values
         .toList();
     _produto.value = _produto.value!.copyWith(grupos: gruposOrdenados);
+  }
+
+  Future<void> carregarProduto(String id) async {
+    try {
+      final produtoCarregado = await _produtoService.obterProduto(id);
+      produto.value = produtoCarregado;
+    } catch (e) {
+      // Tratar erro
+      rethrow;
+    }
+  }
+
+  Future<void> excluirProduto(String id) async {
+    try {
+      await _produtoService.excluirProduto(id);
+      produto.value = null;
+    } catch (e) {
+      // Tratar erro
+      rethrow;
+    }
   }
 }
