@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "request": "launch",
+      "type": "dart",
+      "name": "web",
+      "args": [
+        "-d",
+        "chrome",
+        "--web-port",
+        "8000",
+        "--web-experimental-hot-reload",
+        "--web-browser-flag=--disable-web-security"
+      ],
+      "program": "lib/main.dart"
+    }
+  ]
+}
