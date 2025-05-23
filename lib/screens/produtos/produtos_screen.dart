@@ -45,7 +45,7 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
             itemBuilder: (context, index) {
               final produto = produtos[index];
               return Card(
-                child: ListTile(
+                child: ExpansionTile(
                   leading: produto.imagem.isNotEmpty
                       ? Image.network(
                           produto.imagem,
@@ -60,7 +60,6 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(produto.categoria),
                       Text('R\$ ${produto.preco.toStringAsFixed(2)}'),
                       if (produto.descricao.isNotEmpty)
                         Text(
@@ -78,13 +77,6 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
                               backgroundColor: Colors.red,
                               labelStyle: TextStyle(color: Colors.white),
                             ),
-                          ...produto.disponibilidade.diasSemana.map(
-                            (dia) => Chip(
-                              label: Text(_getDiaSemanaLabel(dia)),
-                              backgroundColor: Colors.green,
-                              labelStyle: const TextStyle(color: Colors.white),
-                            ),
-                          ),
                         ],
                       ),
                     ],
@@ -131,6 +123,61 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
                       ),
                     ],
                   ),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Detalhes do Produto',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text('Descrição completa: ${produto.descricao}'),
+                          const SizedBox(height: 16),
+                          if (produto.grupos.isNotEmpty) ...[
+                            const Text(
+                              'Grupos de Complementos',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            ...produto.grupos.map((grupo) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '• ${grupo.nome}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    if (grupo.complementos.isNotEmpty)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: grupo.complementos
+                                              .map((complemento) => Text(
+                                                    '- ${complemento.nome} (R\$ ${complemento.preco.toStringAsFixed(2)})',
+                                                  ))
+                                              .toList(),
+                                        ),
+                                      ),
+                                    const SizedBox(height: 8),
+                                  ],
+                                )),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               );
             },
@@ -138,26 +185,5 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
         },
       ),
     );
-  }
-
-  String _getDiaSemanaLabel(int dia) {
-    switch (dia) {
-      case 0:
-        return 'Dom';
-      case 1:
-        return 'Seg';
-      case 2:
-        return 'Ter';
-      case 3:
-        return 'Qua';
-      case 4:
-        return 'Qui';
-      case 5:
-        return 'Sex';
-      case 6:
-        return 'Sáb';
-      default:
-        return '';
-    }
   }
 }

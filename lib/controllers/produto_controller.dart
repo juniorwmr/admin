@@ -5,6 +5,7 @@ import '../models/grupo_complemento.dart';
 import '../models/complemento_produto.dart';
 import 'dart:convert';
 import 'package:injector/injector.dart';
+import 'produto_wizard_controller.dart';
 
 class ProdutoController {
   static final ProdutoController _instance = ProdutoController._internal();
@@ -17,6 +18,7 @@ class ProdutoController {
   final _produtos = ValueNotifier<List<Produto>>([]);
   final _gruposReutilizaveis = ValueNotifier<List<GrupoComplemento>>([]);
   final _produto = ValueNotifier<Produto?>(null);
+  final _wizardController = ProdutoWizardController();
 
   late final SharedPreferences _prefs;
 
@@ -24,6 +26,7 @@ class ProdutoController {
   ValueNotifier<List<GrupoComplemento>> get gruposReutilizaveis =>
       _gruposReutilizaveis;
   ValueNotifier<Produto?> get produto => _produto;
+  ProdutoWizardController get wizardController => _wizardController;
 
   void _carregarDados() {
     _carregarProdutos();
@@ -44,9 +47,15 @@ class ProdutoController {
   }
 
   void _salvarProdutos() {
-    final produtosJson =
-        _produtos.value.map((produto) => jsonEncode(produto.toJson())).toList();
-    _prefs.setStringList('produtos', produtosJson);
+    try {
+      final produtosJson = _produtos.value
+          .map((produto) => jsonEncode(produto.toJson()))
+          .toList();
+
+      _prefs.setStringList('produtos', produtosJson);
+    } catch (e) {
+      print('Erro ao salvar produtos: $e');
+    }
   }
 
   void _salvarGruposReutilizaveis() {
@@ -63,35 +72,19 @@ class ProdutoController {
       descricao: '',
       imagem: '',
       ativo: true,
-      categoria: '',
       preco: 0.0,
-      disponibilidade: const Disponibilidade(
-        diasSemana: [1, 2, 3, 4, 5, 6], // Segunda a Sábado
-        horaInicio: TimeOfDay(hour: 10, minute: 0),
-        horaFim: TimeOfDay(hour: 22, minute: 0),
-      ),
       grupos: [],
     );
   }
 
-  void atualizarDadosPrincipais({
-    required String nome,
-    required String descricao,
-    required String imagem,
-    required bool ativo,
-    required String categoria,
-    required double preco,
-    required Disponibilidade disponibilidade,
-  }) {
+  void atualizarDadosPrincipais() {
     if (_produto.value == null) return;
     _produto.value = _produto.value!.copyWith(
-      nome: nome,
-      descricao: descricao,
-      imagem: imagem,
-      ativo: ativo,
-      categoria: categoria,
-      preco: preco,
-      disponibilidade: disponibilidade,
+      nome: _wizardController.nomeController.text,
+      descricao: _wizardController.descricaoController.text,
+      imagem: _wizardController.imagemController.text,
+      ativo: true,
+      preco: double.parse(_wizardController.precoController.text),
     );
   }
 
@@ -168,10 +161,11 @@ class ProdutoController {
     _salvarProdutos();
   }
 
-  Future<void> salvarProduto() async {
-    // if (produto.value == null) return;
-    // if (produto.value!.nome.isEmpty) return;
+  void salvarDadosPrincipais() {
+    atualizarDadosPrincipais();
+  }
 
+  Future<void> salvarProduto() async {
     final index = _produtos.value.indexWhere((p) => p.id == _produto.value!.id);
     if (index >= 0) {
       _produtos.value = [

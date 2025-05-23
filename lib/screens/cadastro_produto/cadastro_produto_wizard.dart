@@ -20,7 +20,6 @@ class CadastroProdutoWizard extends StatefulWidget {
 
 class _CadastroProdutoWizardState extends State<CadastroProdutoWizard> {
   final controller = Injector.appInstance.get<ProdutoController>();
-  int _currentStep = 0;
 
   @override
   void initState() {
@@ -31,11 +30,16 @@ class _CadastroProdutoWizardState extends State<CadastroProdutoWizard> {
   }
 
   void _nextStep() async {
-    if (_currentStep < 3) {
-      setState(() => _currentStep++);
+    if (controller.wizardController.currentStep.value < 3) {
+      await controller.wizardController
+          .salvarDadosStep(controller.wizardController.currentStep.value);
+      controller.wizardController.nextStep();
+      controller.salvarDadosPrincipais();
     } else {
       // Salvar produto e redirecionar
       await controller.salvarProduto();
+      await controller.wizardController.limparDadosWizard();
+
       if (mounted) {
         context.go('/produtos');
       }
@@ -43,8 +47,8 @@ class _CadastroProdutoWizardState extends State<CadastroProdutoWizard> {
   }
 
   void _previousStep() {
-    if (_currentStep > 0) {
-      setState(() => _currentStep--);
+    if (controller.wizardController.currentStep.value > 0) {
+      controller.wizardController.previousStep();
     }
   }
 
@@ -58,57 +62,67 @@ class _CadastroProdutoWizardState extends State<CadastroProdutoWizard> {
             title: const Text('Cadastro de Produto'),
             centerTitle: true,
           ),
-          body: Stepper(
-            type: StepperType.horizontal,
-            currentStep: _currentStep,
-            onStepContinue: _nextStep,
-            onStepCancel: _previousStep,
-            controlsBuilder: (context, details) {
-              return Row(
-                children: [
-                  if (_currentStep > 0)
-                    OutlinedButton(
-                      onPressed: details.onStepCancel,
-                      child: const Text('Voltar'),
-                    ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: details.onStepContinue,
-                    child: Text(_currentStep == 3 ? 'Concluir' : 'Continuar'),
+          body: ValueListenableBuilder(
+            valueListenable: controller.wizardController.currentStep,
+            builder: (context, currentStep, _) {
+              return Stepper(
+                type: StepperType.horizontal,
+                currentStep: currentStep,
+                onStepContinue: _nextStep,
+                onStepCancel: _previousStep,
+                controlsBuilder: (context, details) {
+                  return Row(
+                    children: [
+                      if (currentStep > 0)
+                        OutlinedButton(
+                          onPressed: details.onStepCancel,
+                          child: const Text('Voltar'),
+                        ),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: details.onStepContinue,
+                        child:
+                            Text(currentStep == 3 ? 'Concluir' : 'Continuar'),
+                      ),
+                    ],
+                  );
+                },
+                steps: [
+                  Step(
+                    title: const Text('Produto'),
+                    content: const PassoDadosProduto(),
+                    isActive: currentStep >= 0,
+                    state: currentStep > 0
+                        ? StepState.complete
+                        : StepState.indexed,
+                  ),
+                  Step(
+                    title: const Text('Grupos'),
+                    content: const PassoGrupos(),
+                    isActive: currentStep >= 1,
+                    state: currentStep > 1
+                        ? StepState.complete
+                        : StepState.indexed,
+                  ),
+                  Step(
+                    title: const Text('Complementos'),
+                    content: const PassoComplementos(),
+                    isActive: currentStep >= 2,
+                    state: currentStep > 2
+                        ? StepState.complete
+                        : StepState.indexed,
+                  ),
+                  Step(
+                    title: const Text('Revisão'),
+                    content: const PassoRevisao(),
+                    isActive: currentStep >= 3,
+                    state: currentStep == 3
+                        ? StepState.editing
+                        : StepState.indexed,
                   ),
                 ],
               );
             },
-            steps: [
-              Step(
-                title: const Text('Produto'),
-                content: const PassoDadosProduto(),
-                isActive: _currentStep >= 0,
-                state:
-                    _currentStep > 0 ? StepState.complete : StepState.indexed,
-              ),
-              Step(
-                title: const Text('Grupos'),
-                content: const PassoGrupos(),
-                isActive: _currentStep >= 1,
-                state:
-                    _currentStep > 1 ? StepState.complete : StepState.indexed,
-              ),
-              Step(
-                title: const Text('Complementos'),
-                content: const PassoComplementos(),
-                isActive: _currentStep >= 2,
-                state:
-                    _currentStep > 2 ? StepState.complete : StepState.indexed,
-              ),
-              Step(
-                title: const Text('Revisão'),
-                content: const PassoRevisao(),
-                isActive: _currentStep >= 3,
-                state:
-                    _currentStep == 3 ? StepState.editing : StepState.indexed,
-              ),
-            ],
           ),
         );
       },
