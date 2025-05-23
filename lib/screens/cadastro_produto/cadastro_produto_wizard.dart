@@ -40,6 +40,9 @@ class _CadastroProdutoWizardState extends State<CadastroProdutoWizard> {
       await controller.salvarProduto();
       await controller.wizardController.limparDadosWizard();
 
+      // reset step
+      controller.wizardController.currentStep.value = 0;
+
       if (mounted) {
         context.go('/produtos');
       }
@@ -71,20 +74,22 @@ class _CadastroProdutoWizardState extends State<CadastroProdutoWizard> {
                 onStepContinue: _nextStep,
                 onStepCancel: _previousStep,
                 controlsBuilder: (context, details) {
-                  return Row(
-                    children: [
-                      if (currentStep > 0)
-                        OutlinedButton(
-                          onPressed: details.onStepCancel,
-                          child: const Text('Voltar'),
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      children: [
+                        if (currentStep > 0)
+                          OutlinedButton(
+                            onPressed: details.onStepCancel,
+                            child: const Text('Voltar'),
+                          ),
+                        ElevatedButton(
+                          onPressed: details.onStepContinue,
+                          child:
+                              Text(currentStep == 3 ? 'Concluir' : 'Continuar'),
                         ),
-                      const SizedBox(width: 16),
-                      ElevatedButton(
-                        onPressed: details.onStepContinue,
-                        child:
-                            Text(currentStep == 3 ? 'Concluir' : 'Continuar'),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
                 steps: [

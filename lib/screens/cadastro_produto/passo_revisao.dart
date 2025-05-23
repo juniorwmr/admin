@@ -32,7 +32,6 @@ class PassoRevisao extends StatelessWidget {
                 ),
                 ...produto.grupos.map(
                   (g) => Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
@@ -41,7 +40,6 @@ class PassoRevisao extends StatelessWidget {
                           Text(
                             '${g.nome} (${g.obrigatorio ? "Obrigatório" : "Opcional"})',
                           ),
-                          Text('Mín: ${g.qtdMin}  Máx: ${g.qtdMax}'),
                           if (g.descricao.isNotEmpty) Text(g.descricao),
                           const SizedBox(height: 8),
                           const Text(
@@ -53,8 +51,13 @@ class PassoRevisao extends StatelessWidget {
                           ...g.complementos.map(
                             (c) => ListTile(
                               title: Text(c.nome),
-                              subtitle:
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Text('R\$ ${c.preco.toStringAsFixed(2)}'),
+                                  Text('Mín: ${c.qtdMin} Máx: ${c.qtdMax}'),
+                                ],
+                              ),
                               trailing: c.ativo
                                   ? const Icon(
                                       Icons.check_circle,

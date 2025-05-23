@@ -79,6 +79,7 @@ class _PassoDadosProdutoState extends State<PassoDadosProduto> {
           Row(
             children: [
               const Text('Ativo'),
+              const SizedBox(width: 8),
               Switch(
                 value: _ativo,
                 onChanged: (v) {
@@ -87,7 +88,6 @@ class _PassoDadosProdutoState extends State<PassoDadosProduto> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
         ],
       ),
     );

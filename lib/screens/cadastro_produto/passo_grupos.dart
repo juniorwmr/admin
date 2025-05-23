@@ -60,7 +60,7 @@ class PassoGrupos extends StatelessWidget {
                     child: ListTile(
                       title: Text(grupo.nome),
                       subtitle: Text(
-                        '${grupo.obrigatorio ? "Obrigatório" : "Opcional"} - Mín: ${grupo.qtdMin} Máx: ${grupo.qtdMax}',
+                        grupo.obrigatorio ? "Obrigatório" : "Opcional",
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -136,7 +136,7 @@ class PassoGrupos extends StatelessWidget {
                       child: ListTile(
                         title: Text(grupo.nome),
                         subtitle: Text(
-                          '${grupo.obrigatorio ? "Obrigatório" : "Opcional"} - Mín: ${grupo.qtdMin} Máx: ${grupo.qtdMax}',
+                          grupo.obrigatorio ? "Obrigatório" : "Opcional",
                         ),
                         trailing: IconButton(
                           icon: Icon(
@@ -168,8 +168,6 @@ class PassoGrupos extends StatelessWidget {
     final nomeController = TextEditingController();
     final descricaoController = TextEditingController();
     bool obrigatorio = false;
-    int qtdMin = 0;
-    int qtdMax = 1;
 
     showDialog(
       context: context,
@@ -202,61 +200,6 @@ class PassoGrupos extends StatelessWidget {
                   ],
                   onChanged: (v) => setState(() => obrigatorio = v ?? false),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Text('Qtd. mínima'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () => setState(
-                                  () => qtdMin = (qtdMin - 1).clamp(0, qtdMax),
-                                ),
-                              ),
-                              Text('$qtdMin'),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () => setState(
-                                  () => qtdMin = (qtdMin + 1).clamp(0, qtdMax),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Text('Qtd. máxima'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () => setState(
-                                  () => qtdMax = (qtdMax - 1).clamp(qtdMin, 99),
-                                ),
-                              ),
-                              Text('$qtdMax'),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () => setState(
-                                  () => qtdMax = (qtdMax + 1).clamp(qtdMin, 99),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
@@ -273,8 +216,6 @@ class PassoGrupos extends StatelessWidget {
                   nome: nomeController.text,
                   descricao: descricaoController.text,
                   obrigatorio: obrigatorio,
-                  qtdMin: qtdMin,
-                  qtdMax: qtdMax,
                   complementos: [],
                 );
                 controller.adicionarGrupo(grupo);
@@ -296,8 +237,6 @@ class PassoGrupos extends StatelessWidget {
     final nomeController = TextEditingController(text: grupo.nome);
     final descricaoController = TextEditingController(text: grupo.descricao);
     bool obrigatorio = grupo.obrigatorio;
-    int qtdMin = grupo.qtdMin;
-    int qtdMax = grupo.qtdMax;
 
     showDialog(
       context: context,
@@ -330,61 +269,6 @@ class PassoGrupos extends StatelessWidget {
                   ],
                   onChanged: (v) => setState(() => obrigatorio = v ?? false),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Text('Qtd. mínima'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () => setState(
-                                  () => qtdMin = (qtdMin - 1).clamp(0, qtdMax),
-                                ),
-                              ),
-                              Text('$qtdMin'),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () => setState(
-                                  () => qtdMin = (qtdMin + 1).clamp(0, qtdMax),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Text('Qtd. máxima'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () => setState(
-                                  () => qtdMax = (qtdMax - 1).clamp(qtdMin, 99),
-                                ),
-                              ),
-                              Text('$qtdMax'),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () => setState(
-                                  () => qtdMax = (qtdMax + 1).clamp(qtdMin, 99),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
@@ -400,8 +284,6 @@ class PassoGrupos extends StatelessWidget {
                   nome: nomeController.text,
                   descricao: descricaoController.text,
                   obrigatorio: obrigatorio,
-                  qtdMin: qtdMin,
-                  qtdMax: qtdMax,
                 );
                 controller.atualizarGrupo(grupoAtualizado);
                 Navigator.pop(context);

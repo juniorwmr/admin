@@ -5,8 +5,6 @@ class GrupoComplemento {
   final String nome;
   final String descricao;
   final bool obrigatorio;
-  final int qtdMin;
-  final int qtdMax;
   final List<ComplementoProduto> complementos;
   final int ordem;
 
@@ -15,8 +13,6 @@ class GrupoComplemento {
     required this.nome,
     required this.descricao,
     required this.obrigatorio,
-    required this.qtdMin,
-    required this.qtdMax,
     required this.complementos,
     this.ordem = 0,
   });
@@ -26,8 +22,6 @@ class GrupoComplemento {
     String? nome,
     String? descricao,
     bool? obrigatorio,
-    int? qtdMin,
-    int? qtdMax,
     List<ComplementoProduto>? complementos,
     int? ordem,
   }) {
@@ -36,8 +30,6 @@ class GrupoComplemento {
       nome: nome ?? this.nome,
       descricao: descricao ?? this.descricao,
       obrigatorio: obrigatorio ?? this.obrigatorio,
-      qtdMin: qtdMin ?? this.qtdMin,
-      qtdMax: qtdMax ?? this.qtdMax,
       complementos: complementos ?? this.complementos,
       ordem: ordem ?? this.ordem,
     );
@@ -49,8 +41,6 @@ class GrupoComplemento {
       'nome': nome,
       'descricao': descricao,
       'obrigatorio': obrigatorio,
-      'qtdMin': qtdMin,
-      'qtdMax': qtdMax,
       'complementos': complementos.map((c) => c.toJson()).toList(),
       'ordem': ordem,
     };
@@ -62,8 +52,6 @@ class GrupoComplemento {
       nome: json['nome'] as String,
       descricao: json['descricao'] as String,
       obrigatorio: json['obrigatorio'] as bool,
-      qtdMin: json['qtdMin'] as int,
-      qtdMax: json['qtdMax'] as int,
       complementos: (json['complementos'] as List)
           .map((c) => ComplementoProduto.fromJson(c as Map<String, dynamic>))
           .toList(),

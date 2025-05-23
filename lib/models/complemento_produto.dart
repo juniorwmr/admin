@@ -7,6 +7,8 @@ class ComplementoProduto {
   final String codigoPDV;
   final bool ativo;
   final int tempoPreparoExtra; // em minutos
+  final int qtdMin;
+  final int qtdMax;
 
   const ComplementoProduto({
     required this.id,
@@ -17,6 +19,8 @@ class ComplementoProduto {
     required this.codigoPDV,
     required this.ativo,
     this.tempoPreparoExtra = 0,
+    this.qtdMin = 0,
+    this.qtdMax = 1,
   });
 
   ComplementoProduto copyWith({
@@ -28,6 +32,8 @@ class ComplementoProduto {
     String? codigoPDV,
     bool? ativo,
     int? tempoPreparoExtra,
+    int? qtdMin,
+    int? qtdMax,
   }) {
     return ComplementoProduto(
       id: id ?? this.id,
@@ -38,6 +44,8 @@ class ComplementoProduto {
       codigoPDV: codigoPDV ?? this.codigoPDV,
       ativo: ativo ?? this.ativo,
       tempoPreparoExtra: tempoPreparoExtra ?? this.tempoPreparoExtra,
+      qtdMin: qtdMin ?? this.qtdMin,
+      qtdMax: qtdMax ?? this.qtdMax,
     );
   }
 
@@ -51,6 +59,8 @@ class ComplementoProduto {
       'codigoPDV': codigoPDV,
       'ativo': ativo,
       'tempoPreparoExtra': tempoPreparoExtra,
+      'qtdMin': qtdMin,
+      'qtdMax': qtdMax,
     };
   }
 
@@ -64,6 +74,8 @@ class ComplementoProduto {
       codigoPDV: json['codigoPDV'] as String,
       ativo: json['ativo'] as bool,
       tempoPreparoExtra: json['tempoPreparoExtra'] as int? ?? 0,
+      qtdMin: json['qtdMin'] as int? ?? 0,
+      qtdMax: json['qtdMax'] as int? ?? 1,
     );
   }
 }

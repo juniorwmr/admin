@@ -36,7 +36,7 @@ class PassoComplementos extends StatelessWidget {
                         ListTile(
                           title: Text(grupo.nome),
                           subtitle: Text(
-                            '${grupo.obrigatorio ? "Obrigatório" : "Opcional"} - Mín: ${grupo.qtdMin} Máx: ${grupo.qtdMax}',
+                            grupo.obrigatorio ? "Obrigatório" : "Opcional",
                           ),
                           trailing: TextButton.icon(
                             onPressed: () => _mostrarDialogoNovoComplemento(
@@ -175,6 +175,8 @@ class PassoComplementos extends StatelessWidget {
     final codigoPDVController = TextEditingController();
     final tempoPreparoController = TextEditingController();
     bool ativo = true;
+    int qtdMin = 0;
+    int qtdMax = 0;
 
     showDialog(
       context: context,
@@ -232,6 +234,61 @@ class PassoComplementos extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const Text('Qtd. mínima'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove),
+                                onPressed: () => setState(
+                                  () => qtdMin = (qtdMin - 1).clamp(0, qtdMax),
+                                ),
+                              ),
+                              Text('$qtdMin'),
+                              IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: () => setState(
+                                  () => qtdMin = (qtdMin + 1).clamp(0, qtdMax),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const Text('Qtd. máxima'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove),
+                                onPressed: () => setState(
+                                  () => qtdMax = (qtdMax - 1).clamp(qtdMin, 99),
+                                ),
+                              ),
+                              Text('$qtdMax'),
+                              IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: () => setState(
+                                  () => qtdMax = (qtdMax + 1).clamp(qtdMin, 99),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
                     const Text('Ativo'),
                     Switch(
                       value: ativo,
@@ -260,6 +317,8 @@ class PassoComplementos extends StatelessWidget {
                   ativo: ativo,
                   tempoPreparoExtra:
                       int.tryParse(tempoPreparoController.text) ?? 0,
+                  qtdMin: qtdMin,
+                  qtdMax: qtdMax,
                 );
                 controller.adicionarComplemento(grupo.id, complemento);
                 Navigator.pop(context);
@@ -289,6 +348,8 @@ class PassoComplementos extends StatelessWidget {
     final tempoPreparoController =
         TextEditingController(text: complemento.tempoPreparoExtra.toString());
     bool ativo = complemento.ativo;
+    int qtdMin = complemento.qtdMin;
+    int qtdMax = complemento.qtdMax;
 
     showDialog(
       context: context,
@@ -346,6 +407,61 @@ class PassoComplementos extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const Text('Qtd. mínima'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove),
+                                onPressed: () => setState(
+                                  () => qtdMin = (qtdMin - 1).clamp(0, qtdMax),
+                                ),
+                              ),
+                              Text('$qtdMin'),
+                              IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: () => setState(
+                                  () => qtdMin = (qtdMin + 1).clamp(0, qtdMax),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const Text('Qtd. máxima'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove),
+                                onPressed: () => setState(
+                                  () => qtdMax = (qtdMax - 1).clamp(qtdMin, 99),
+                                ),
+                              ),
+                              Text('$qtdMax'),
+                              IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: () => setState(
+                                  () => qtdMax = (qtdMax + 1).clamp(qtdMin, 99),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
                     const Text('Ativo'),
                     Switch(
                       value: ativo,
@@ -373,6 +489,8 @@ class PassoComplementos extends StatelessWidget {
                   ativo: ativo,
                   tempoPreparoExtra:
                       int.tryParse(tempoPreparoController.text) ?? 0,
+                  qtdMin: qtdMin,
+                  qtdMax: qtdMax,
                 );
                 controller.atualizarComplemento(
                     grupo.id, complementoAtualizado);
