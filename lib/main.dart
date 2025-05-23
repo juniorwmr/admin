@@ -3,9 +3,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'constants.dart';
 import 'router.dart';
+import 'di/injector.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setUrlStrategy(PathUrlStrategy());
+
+  try {
+    await setupInjector();
+  } catch (e) {
+    debugPrint('Erro ao configurar injector: $e');
+  }
+
   runApp(const MyApp());
 }
 

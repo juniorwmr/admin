@@ -5,9 +5,7 @@ import 'chart.dart';
 import 'storage_info_card.dart';
 
 class StorageDetails extends StatelessWidget {
-  const StorageDetails({
-    Key? key,
-  }) : super(key: key);
+  const StorageDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +20,7 @@ class StorageDetails extends StatelessWidget {
         children: [
           Text(
             "Storage Details",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: defaultPadding),
           Chart(),

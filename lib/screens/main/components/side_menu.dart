@@ -19,10 +19,24 @@ class SideMenu extends StatelessWidget {
             },
           ),
           DrawerListTile(
-            title: "Cardápio",
+            title: "Produtos",
             svgSrc: "assets/icons/menu_dashboard.svg",
             press: () {
-              context.go('/cardapio');
+              context.go('/produtos');
+            },
+          ),
+          DrawerListTile(
+            title: "Grupos Reutilizáveis",
+            svgSrc: "assets/icons/menu_dashboard.svg",
+            press: () {
+              context.go('/grupos-reutilizaveis');
+            },
+          ),
+          DrawerListTile(
+            title: "Novo Produto",
+            svgSrc: "assets/icons/menu_dashboard.svg",
+            press: () {
+              context.go('/cadastro-produto');
             },
           ),
         ],
@@ -50,10 +64,10 @@ class DrawerListTile extends StatelessWidget {
       horizontalTitleGap: 0.0,
       leading: SvgPicture.asset(
         svgSrc,
-        colorFilter: ColorFilter.mode(Colors.white54, BlendMode.srcIn),
+        colorFilter: const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
         height: 16,
       ),
-      title: Text(title, style: TextStyle(color: Colors.white54)),
+      title: Text(title, style: const TextStyle(color: Colors.white54)),
     );
   }
 }
