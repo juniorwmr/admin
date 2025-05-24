@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:injector/injector.dart';
-import '../../controllers/produto_controller.dart';
+import '../controllers/produto_controller.dart';
 
 class PassoRevisao extends StatelessWidget {
   const PassoRevisao({super.key});

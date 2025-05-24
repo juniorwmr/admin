@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../controllers/produto_controller.dart';
+import '../controllers/produto_controller.dart';
 import 'passo_dados_produto.dart';
 import 'passo_grupos.dart';
 import 'passo_complementos.dart';
@@ -77,12 +77,14 @@ class _CadastroProdutoWizardState extends State<CadastroProdutoWizard> {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Row(
+                      spacing: 8,
                       children: [
                         if (currentStep > 0)
                           OutlinedButton(
                             onPressed: details.onStepCancel,
                             child: const Text('Voltar'),
                           ),
+                        const SizedBox(width: 4),
                         ElevatedButton(
                           onPressed: details.onStepContinue,
                           child:

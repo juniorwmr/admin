@@ -2,7 +2,7 @@ import 'package:admin/shared/widget_collapsible.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injector/injector.dart';
-import '../../controllers/produto_controller.dart';
+import '../controllers/produto_controller.dart';
 
 class ProdutosScreen extends StatefulWidget {
   const ProdutosScreen({super.key});
@@ -12,14 +12,17 @@ class ProdutosScreen extends StatefulWidget {
 }
 
 class _ProdutosScreenState extends State<ProdutosScreen> {
+  late final ProdutoController controller;
+
   @override
   void initState() {
     super.initState();
+    controller = Injector.appInstance.get<ProdutoController>();
+    controller.carregarProdutos();
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Injector.appInstance.get<ProdutoController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Produtos'),
@@ -34,6 +37,29 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
       body: ValueListenableBuilder(
         valueListenable: controller.produtos,
         builder: (context, produtos, _) {
+          if (controller.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (controller.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    controller.error!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => controller.carregarProdutos(),
+                    child: const Text('Tentar novamente'),
+                  ),
+                ],
+              ),
+            );
+          }
+
           if (produtos.isEmpty) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +111,7 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  controller.removerProduto(produto.id);
+                                  controller.excluirProduto(produto.id);
                                   Navigator.pop(context);
                                 },
                                 child: const Text(
@@ -100,9 +126,9 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
                     ),
                   ],
                 ),
-                leading: produto.imagem.isNotEmpty
+                leading: produto.imagem != null && produto.imagem!.isNotEmpty
                     ? Image.network(
-                        produto.imagem,
+                        produto.imagem!,
                         width: 56,
                         height: 56,
                         fit: BoxFit.cover,
@@ -154,7 +180,7 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
                           const SizedBox(height: 16),
                           if (produto.grupos.isNotEmpty) ...[
                             const Text(
-                              'Grupos de Complementos',
+                              'Grupos',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

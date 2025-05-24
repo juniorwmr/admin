@@ -1,9 +1,10 @@
+import 'package:admin/extensions/string.dart';
 import 'package:admin/shared/widget_collapsible.dart';
 import 'package:flutter/material.dart';
 import 'package:injector/injector.dart';
-import '../../controllers/produto_controller.dart';
-import '../../models/grupo_complemento.dart';
-import '../../models/complemento_produto.dart';
+import '../../produtos/controllers/produto_controller.dart';
+import '../models/grupo_complemento.dart';
+import '../../produtos/models/complemento_produto.dart';
 
 class GruposReutilizaveisScreen extends StatelessWidget {
   const GruposReutilizaveisScreen({super.key});
@@ -73,7 +74,27 @@ class GruposReutilizaveisScreen extends StatelessWidget {
                         ...grupo.complementos.map(
                           (c) => ListTile(
                             title: Text(c.nome),
-                            subtitle: Text('R\$ ${c.preco.toStringAsFixed(2)}'),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('R\$ ${c.preco.toStringAsFixed(2)}'),
+                                const SizedBox(height: 4),
+                                Text(
+                                  c.obrigatorio ? 'Obrigatório' : 'Opcional',
+                                  style: TextStyle(
+                                    color: Colors.blueGrey.shade400,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Text(
+                                  ' Qtd mínima: ${c.qtdMin} - Qtd máxima: ${c.qtdMax}',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade400,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -82,6 +103,17 @@ class GruposReutilizaveisScreen extends StatelessWidget {
                                     message: '+${c.tempoPreparoExtra} min',
                                     child: const Icon(Icons.timer),
                                   ),
+                                IconButton(
+                                  onPressed: () =>
+                                      _mostrarDialogoEditarComplemento(
+                                    context,
+                                    grupo,
+                                    c,
+                                    controller,
+                                  ),
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.white),
+                                ),
                                 IconButton(
                                   icon: const Icon(Icons.delete,
                                       color: Colors.red),
@@ -226,15 +258,6 @@ class GruposReutilizaveisScreen extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Descrição (opcional)',
                   ),
-                ),
-                const SizedBox(height: 8),
-                DropdownButton<bool>(
-                  value: obrigatorio,
-                  items: const [
-                    DropdownMenuItem(value: false, child: Text('Opcional')),
-                    DropdownMenuItem(value: true, child: Text('Obrigatório')),
-                  ],
-                  onChanged: (v) => setState(() => obrigatorio = v ?? false),
                 ),
               ],
             ),
@@ -473,11 +496,15 @@ class GruposReutilizaveisScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 if (nomeController.text.isEmpty) return;
+
+                final obrigatorio = qtdMin > 0;
+                final preco = precoController.text.toMoney();
+
                 final complemento = ComplementoProduto(
                   id: UniqueKey().toString(),
                   nome: nomeController.text,
                   descricao: descricaoController.text,
-                  preco: double.tryParse(precoController.text) ?? 0.0,
+                  preco: preco,
                   imagem: imagemController.text,
                   codigoPDV: codigoPDVController.text,
                   ativo: ativo,
@@ -485,6 +512,7 @@ class GruposReutilizaveisScreen extends StatelessWidget {
                       int.tryParse(tempoPreparoController.text) ?? 0,
                   qtdMin: qtdMin,
                   qtdMax: qtdMax,
+                  obrigatorio: obrigatorio,
                 );
                 final novoGrupo = grupo.copyWith(
                   complementos: [...grupo.complementos, complemento],

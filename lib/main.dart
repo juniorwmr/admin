@@ -1,20 +1,28 @@
+import 'package:admin/di/injector.dart';
+import 'package:admin/router.dart';
+import 'package:admin/theme/app_theme.dart';
+import 'package:admin/services/dashboard_service.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'constants.dart';
-import 'router.dart';
-import 'di/injector.dart';
-import 'shared/config/env_config.dart';
+import 'package:injector/injector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setUrlStrategy(PathUrlStrategy());
 
+  // Carrega as variáveis de ambiente
+  await dotenv.load(fileName: '.env');
+
+  // Configura o injetor de dependências
+  await setupInjector();
+
+  // Verifica se o DashboardService está registrado
+  final injector = Injector.appInstance;
   try {
-    await EnvConfig.init();
-    await setupInjector();
+    injector.get<DashboardService>();
   } catch (e) {
-    debugPrint('Erro ao configurar injector: $e');
+    throw Exception('DashboardService não está registrado!');
   }
 
   runApp(const MyApp());
@@ -29,13 +37,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Admin Panel',
       routerConfig: router,
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: bgColor,
-        textTheme: GoogleFonts.andikaTextTheme(
-          Theme.of(context).textTheme,
-        ).apply(bodyColor: Colors.white),
-        canvasColor: secondaryColor,
-      ),
+      theme: AppTheme.darkTheme,
     );
   }
 }

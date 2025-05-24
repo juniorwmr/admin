@@ -1,9 +1,11 @@
 import 'package:admin/screens/dashboard/dashboard_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/main/main_screen.dart';
-import 'screens/cadastro_produto/cadastro_produto_wizard.dart';
-import 'screens/produtos/produtos_screen.dart';
-import 'screens/grupos_reutilizaveis/grupos_reutilizaveis_screen.dart';
+import 'features/produtos/components/produto_cadastro_wizard.dart';
+import 'features/produtos/screens/produtos_screen.dart';
+import 'features/grupos/screens/grupos_reutilizaveis_screen.dart';
+import 'features/documentos/screens/documentos_screen.dart';
+import 'features/drive/screens/drive_screen.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -32,6 +34,14 @@ final router = GoRouter(
           builder: (context, state) => CadastroProdutoWizard(
             produtoId: state.pathParameters['id'],
           ),
+        ),
+        GoRoute(
+          path: '/documentos',
+          builder: (context, state) => const DocumentosScreen(),
+        ),
+        GoRoute(
+          path: '/drive',
+          builder: (context, state) => const DriveScreen(),
         ),
       ],
     ),

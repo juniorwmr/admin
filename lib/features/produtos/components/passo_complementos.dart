@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:injector/injector.dart';
-import '../../controllers/produto_controller.dart';
-import '../../models/complemento_produto.dart';
-import '../../models/grupo_complemento.dart';
+import '../controllers/produto_controller.dart';
+import '../models/complemento_produto.dart';
+import '../../grupos/models/grupo_complemento.dart';
 
 class PassoComplementos extends StatelessWidget {
   const PassoComplementos({super.key});

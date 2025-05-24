@@ -32,13 +32,6 @@ class SideMenu extends StatelessWidget {
               context.go('/grupos-reutilizaveis');
             },
           ),
-          DrawerListTile(
-            title: "Novo Produto",
-            svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {
-              context.go('/cadastro-produto');
-            },
-          ),
         ],
       ),
     );

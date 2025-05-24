@@ -1,5 +1,5 @@
 import 'package:admin/controllers/menu_app_controller.dart';
-import 'package:admin/responsive.dart';
+import 'package:admin/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 import 'components/side_menu.dart';
@@ -14,14 +14,14 @@ class MainScreen extends StatelessWidget {
 
     return Scaffold(
       key: menuController.scaffoldKey,
-      drawer: SideMenu(),
+      drawer: const SideMenu(),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // We wan,t this side menu only for large screen
             if (Responsive.isDesktop(context))
-              Expanded(
+              const Expanded(
                 // default flex = 1
                 // and it takes 1/6 part of the screen
                 child: SideMenu(),

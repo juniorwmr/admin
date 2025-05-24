@@ -1,41 +1,37 @@
-import 'grupo_complemento.dart';
-
 class Produto {
   final String id;
   final String nome;
   final String descricao;
-  final String imagem;
-  final bool ativo;
   final double preco;
-  final List<GrupoComplemento> grupos;
+  final String? imagem;
+  final String? grupoId;
+  final bool ativo;
+  final DateTime dataCriacao;
+  final DateTime dataAtualizacao;
 
-  const Produto({
+  Produto({
     required this.id,
     required this.nome,
     required this.descricao,
-    required this.imagem,
-    required this.ativo,
     required this.preco,
-    required this.grupos,
+    this.imagem,
+    this.grupoId,
+    required this.ativo,
+    required this.dataCriacao,
+    required this.dataAtualizacao,
   });
 
-  Produto copyWith({
-    String? id,
-    String? nome,
-    String? descricao,
-    String? imagem,
-    bool? ativo,
-    double? preco,
-    List<GrupoComplemento>? grupos,
-  }) {
+  factory Produto.fromJson(Map<String, dynamic> json) {
     return Produto(
-      id: id ?? this.id,
-      nome: nome ?? this.nome,
-      descricao: descricao ?? this.descricao,
-      imagem: imagem ?? this.imagem,
-      ativo: ativo ?? this.ativo,
-      preco: preco ?? this.preco,
-      grupos: grupos ?? this.grupos,
+      id: json['id'],
+      nome: json['nome'],
+      descricao: json['descricao'],
+      preco: json['preco'].toDouble(),
+      imagem: json['imagem'],
+      grupoId: json['grupoId'],
+      ativo: json['ativo'],
+      dataCriacao: DateTime.parse(json['dataCriacao']),
+      dataAtualizacao: DateTime.parse(json['dataAtualizacao']),
     );
   }
 
@@ -44,24 +40,36 @@ class Produto {
       'id': id,
       'nome': nome,
       'descricao': descricao,
-      'imagem': imagem,
-      'ativo': ativo,
       'preco': preco,
-      'grupos': grupos.map((g) => g.toJson()).toList(),
+      'imagem': imagem,
+      'grupoId': grupoId,
+      'ativo': ativo,
+      'dataCriacao': dataCriacao.toIso8601String(),
+      'dataAtualizacao': dataAtualizacao.toIso8601String(),
     };
   }
 
-  factory Produto.fromJson(Map<String, dynamic> json) {
+  Produto copyWith({
+    String? id,
+    String? nome,
+    String? descricao,
+    double? preco,
+    String? imagem,
+    String? grupoId,
+    bool? ativo,
+    DateTime? dataCriacao,
+    DateTime? dataAtualizacao,
+  }) {
     return Produto(
-      id: json['id'] as String,
-      nome: json['nome'] as String,
-      descricao: json['descricao'] as String,
-      imagem: json['imagem'] as String,
-      ativo: json['ativo'] as bool,
-      preco: (json['preco'] as num).toDouble(),
-      grupos: (json['grupos'] as List)
-          .map((g) => GrupoComplemento.fromJson(g as Map<String, dynamic>))
-          .toList(),
+      id: id ?? this.id,
+      nome: nome ?? this.nome,
+      descricao: descricao ?? this.descricao,
+      preco: preco ?? this.preco,
+      imagem: imagem ?? this.imagem,
+      grupoId: grupoId ?? this.grupoId,
+      ativo: ativo ?? this.ativo,
+      dataCriacao: dataCriacao ?? this.dataCriacao,
+      dataAtualizacao: dataAtualizacao ?? this.dataAtualizacao,
     );
   }
 }

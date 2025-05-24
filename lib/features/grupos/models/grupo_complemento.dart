@@ -1,4 +1,4 @@
-import 'complemento_produto.dart';
+import '../../produtos/models/complemento_produto.dart';
 
 class GrupoComplemento {
   final String id;

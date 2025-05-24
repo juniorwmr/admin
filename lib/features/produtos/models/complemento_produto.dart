@@ -9,6 +9,7 @@ class ComplementoProduto {
   final int tempoPreparoExtra; // em minutos
   final int qtdMin;
   final int qtdMax;
+  final bool obrigatorio;
 
   const ComplementoProduto({
     required this.id,
@@ -21,6 +22,7 @@ class ComplementoProduto {
     this.tempoPreparoExtra = 0,
     this.qtdMin = 0,
     this.qtdMax = 1,
+    this.obrigatorio = false,
   });
 
   ComplementoProduto copyWith({
@@ -34,6 +36,7 @@ class ComplementoProduto {
     int? tempoPreparoExtra,
     int? qtdMin,
     int? qtdMax,
+    bool? obrigatorio,
   }) {
     return ComplementoProduto(
       id: id ?? this.id,
@@ -46,6 +49,7 @@ class ComplementoProduto {
       tempoPreparoExtra: tempoPreparoExtra ?? this.tempoPreparoExtra,
       qtdMin: qtdMin ?? this.qtdMin,
       qtdMax: qtdMax ?? this.qtdMax,
+      obrigatorio: obrigatorio ?? this.obrigatorio,
     );
   }
 
@@ -61,6 +65,7 @@ class ComplementoProduto {
       'tempoPreparoExtra': tempoPreparoExtra,
       'qtdMin': qtdMin,
       'qtdMax': qtdMax,
+      'obrigatorio': obrigatorio,
     };
   }
 
@@ -76,6 +81,7 @@ class ComplementoProduto {
       tempoPreparoExtra: json['tempoPreparoExtra'] as int? ?? 0,
       qtdMin: json['qtdMin'] as int? ?? 0,
       qtdMax: json['qtdMax'] as int? ?? 1,
+      obrigatorio: json['obrigatorio'] as bool? ?? false,
     );
   }
 }
